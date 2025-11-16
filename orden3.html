@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Orden Generada</title>
+  <style>
+    body {
+      font-family: Arial;
+      padding: 20px;
+      background: #f0f0f0;
+      
+    }
+    .orden {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 900px;
+      margin: auto;
+      position: relative; 
+    
+    }
+    h2 {
+      text-align: center;
+      color: #004080;
+    }
+    .titulo-seccion {
+      margin-top: 30px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #004080;
+      text-align: center; 
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+    img.firma {
+      border: 1px solid #ccc;
+      margin-top: 10px;
+    }
+   #contenedor_evidencias {
+  display: flex;
+  flex-direction: column;      /* apiladas en columna */
+  align-items: center;         /* centradas horizontalmente */
+  gap: 20px;                   /* espacio vertical entre ellas */
+  margin-top: 10px;
+}
+
+#contenedor_evidencias img {
+  width: 80%;                  /* ancho uniforme */
+  max-width: 600px;            /* tope opcional */
+  height: 300px;               /* 🔑 alto fijo para todas */
+  object-fit: contain;         /* recorta para llenar el cuadro sin deformar */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+
+
+
+
+    /* Estilo tabla personalizada */
+    .tabla-equipo {
+      border-collapse: collapse;
+      width: 100%;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      max-width: 80%;
+      margin: auto; 
+    }
+
+    .tabla-equipo th, .tabla-equipo td {
+      border: 1px solid black;
+      padding: 4px 8px;
+      text-align: left;
+    }
+
+    .tabla-equipo .titulo {
+      background-color: #ccc;
+      font-weight: bold;
+      text-align: center;
+      font-size: 16px;
+    }
+
+    .tabla-equipo .subtitulo {
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .tabla-equipo .etiqueta {
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+/* Estilo tabla fecha /ID */
+   .tabla-fecha-id {
+  position: absolute;   /* ahora relativo al div .orden */
+  top: 20px;            /* separa 20px del borde superior interno */
+  right: 20px;          /* separa 20px del borde derecho interno */
+}
+
+
+.tabla-fecha-id table {
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  background: #fff;
+  border: 1px solid #000;
+}
+
+.tabla-fecha-id th {
+  background: #cfd8e6;     /* tono gris/azulado como el ejemplo */
+  font-weight: bold;
+  padding: 6px 12px;
+  border: 1px solid #000;
+  text-align: center;
+}
+
+.tabla-fecha-id td {
+  padding: 6px 12px;
+  border: 1px solid #000;
+  text-align: center;
+}
+
+/* Estilo tabla numero de orden */
+
+.tabla-num-orden {
+  position: absolute;   /* se posiciona dentro de la hoja */
+  top: 20px;
+  left: 20px;
+}
+
+.tabla-num-orden table {
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  background: #fff;
+  border: 1px solid #000;
+}
+
+.tabla-num-orden th {
+  background: #cfd8e6;
+  font-weight: bold;
+  padding: 6px 12px;
+  border: 1px solid #000;
+  text-align: center;
+}
+
+.tabla-num-orden td {
+  padding: 6px 12px;
+  border: 1px solid #000;
+  text-align: center;
+}
+
+  </style>
+  <!-- Librerías necesarias -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://unpkg.com/@capacitor/core@latest/dist/capacitor.js"></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+   
+
+  <div class="orden">
+   <div class="tabla-fecha-id">
+  <table>
+    <tr>
+      <th>Fecha</th>
+    </tr>
+    <tr>
+      <td><span id="r_fecha"></span></td>
+    </tr>
+    <tr>
+      <th>ID Equipo</th>
+    </tr>
+    <tr>
+      <td><span id="r_id"></span></td>
+    </tr>
+  </table>
+</div>
+
+<div class="tabla-num-orden">
+  <table>
+    <tr><th>N° Orden</th></tr>
+    <tr><td><span id="r_numeroOrden"></span></td></tr>
+  </table>
+</div>
+
+
+    <br> 
+    <br> 
+    <br>
+    <br>
+    <br> 
+    <p style="font-size: 18px; font-weight: bold; text-align: center; margin: 2px 0;">
+      CENTRO MÉDICO NAVAL 
+    </p>
+    <p style="font-size: 18px; font-weight: bold; text-align: center; margin: 2px 0;">
+      DIRECCIÓN DE INGENIERÍA Y SERVICIOS
+    </p>
+    
+    <p style="font-size: 16px; font-weight: bold; text-align: center; margin: 2px 0;">
+      SUBDIRECCIÓN DE INGENIERÍA BIOMÉDICA
+    </p>
+<h2><span style="text-decoration: underline;">SERVICIO DE MANTENIMIENTO PREVENTIVO</span></h2>
+   
+
+    <div id="contenido"></div>
+
+   
+    <div id="contenedor_evidencias" style="display:flex; flex-wrap: wrap; gap:10px; margin-top:10px;"></div>
+  </div>
+
+  <div style="text-align: center; margin-top: 20px;">
+    <button onclick="generarPDF()">Descargar PDF</button>
+  </div>
+
+  <script>
+   const datos = JSON.parse(sessionStorage.getItem("orden3")) || {};
+
+
+    const equipos = {
+      "URG-050": {
+        ID:"URG-050",
+        equipo: "Monitor de Signos Vitales",
+        marca: "Philips",
+        modelo: "MX700",
+        serie: "DE58552015",
+        area: "Urgencias",
+        fecha: "2025-06-01"
+      },
+      "ICU-101": {
+        ID:"ICU-101",
+        equipo: "Ventilador de cuidados intensivos",
+        marca: "Dräger",
+        modelo: "Evita Infinity V500",
+        serie: "DRG200354",
+        area: "Terapia Intensiva",
+        fecha: "2025-06-15"
+      }
+    };
+
+    // Si existe el ID en equipos lo usa, si no, devuelve un objeto vacío
+const equipo = {
+  equipo: datos.equipo,
+  marca: datos.marca,
+  modelo: datos.modelo,
+  serie: datos.serie,
+  area: datos.area
+};
+
+
+
+    let html = `
+     
+      <table class="tabla-equipo">
+        <tr>
+          <th colspan="4" class="titulo">Descripción del Equipo</th>
+        </tr>
+        <tr>
+          <td class="etiqueta">Equipo:</td>
+          <td colspan="3" class="subtitulo">${equipo.equipo}</td>
+        </tr>
+        <tr>
+          <td class="etiqueta">Marca:</td>
+          <td>${equipo.marca}</td>
+          <td class="etiqueta">Modelo:</td>
+          <td>${equipo.modelo}</td>
+        </tr>
+        <tr>
+          <td class="etiqueta">No. Serie</td>
+          <td>${equipo.serie}</td>
+          <td class="etiqueta">Área</td>
+          <td>${equipo.area}</td>
+        </tr>
+        
+      </table>
+
+      <div class="titulo-seccion">Rutina de Mantenimiento</div>
+      <br>
+<table class="tabla-equipo">
+  <tr>
+    <th class="titulo" style="background-color: #f0f0f0;">Descripción de la Rutina</th>
+    <th class="titulo"  style="background-color: #f0f0f0;">Aprobada</th>
+    <th class="titulo"  style="background-color: #f0f0f0;">Negada</th>
+  </tr>
+  <!-- filas generadas por JS -->
+  ${datos.rutinas.map(r => `
+  <tr>
+    <td>${r.texto}</td>
+    <td style="text-align:center;">${r.estado === "Aprobada" ? "✔" : ""}</td>
+    <td style="text-align:center;">${r.estado === "Negada" ? "✔" : ""}</td>
+  </tr>
+`).join("")}
+
+</table>
+
+<br>
+<table class="tabla-equipo">
+<!-- Refacciones y Observaciones en una sola fila -->
+
+  <tr>
+    
+    <th class="titulo" style="background-color: #f0f0f0; border: 1px solid black;">Observaciones</th>
+  </tr>
+  <tr>
+<td rowspan="5" style="border: 1px solid black; text-align:center; height: 100px;">
+  ${datos.observaciones}
+</td>
+
+  </tr>
+  <tr>
+    
+  </tr>
+  
+</table>
+<br>
+<!-- Condiciones Finales -->
+<table class="tabla-equipo">
+  <tr>
+    <th class="titulo" colspan="2" style="background-color: #f0f0f0;">Condiciones Finales</th>
+  </tr>
+    <tr>
+    <td style="width: 50%;"><b>Estado del Equipo: ${datos.descripcion}</td>
+    <td style="width: 50%;"><b>Recomendaciones: ${datos.recomendaciones}</td>
+  </tr>
+</table>
+
+
+
+      <div class="titulo-seccion">Firmas</div>
+
+<table class="tabla-equipo">
+  <tr>
+    <td style="border: 1px solid #f0f0f0; height: 100px;">
+      <img id="firma_tecnico_img" class="firma" width="250" height="100" />
+    </td>
+    <td style="border: 1px solid #f0f0f0; height: 100px;">
+      <img id="firma_responsable_img" class="firma" width="250" height="100" />
+    </td>
+    <td style="border: 1px solid #f0f0f0; height: 100px;">
+      <img id="imgFirmaSupervisor" class="firma" width="250" height="100" />
+    </td>
+  </tr>
+  <tr>
+<td style="border: 1px solid #f0f0f0; text-align: center;"><strong>Firma del área usuaria</strong></td>
+<td style="border: 1px solid #f0f0f0; text-align: center;"><strong>Ingeniero de servicio</strong></td>
+<td style="border: 1px solid #f0f0f0; text-align: center;"><strong>Subtor. de Ingenieria Biomédica</strong></td>
+
+  </tr>
+</table>
+
+    `;
+   
+
+    document.getElementById("contenido").innerHTML = html;
+
+    document.getElementById("firma_tecnico_img").src = datos.firmaTecnico;
+    document.getElementById("firma_responsable_img").src = datos.firmaResponsable;
+    document.getElementById("imgFirmaSupervisor").src = datos.firmaSupervisor;
+    document.getElementById("r_fecha").textContent = datos.fecha_mantenimiento
+
+  ? new Date(datos.fecha_mantenimiento).toLocaleDateString("es-MX", { month: "long", year: "numeric" })
+  : "";
+ document.getElementById("r_id").textContent = datos.id ? datos.id : "N/A";
+document.getElementById("r_numeroOrden").textContent = datos.numeroOrden || "N/A";
+
+
+    const contenedor = document.getElementById('contenedor_evidencias');
+    if (datos.evidencias && datos.evidencias.length > 0) {
+      datos.evidencias.forEach(imgData => {
+        const img = document.createElement('img');
+        img.src = imgData;
+        contenedor.appendChild(img);
+      });
+    } else {
+      contenedor.innerHTML = "<p>No se subieron evidencias fotográficas.</p>";
+    }
+  </script>
+
+ <script>
+
+async function generarPDF() {
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({
+    orientation: 'portrait',
+    unit: 'pt',
+    format: 'letter'
+  });
+
+  const ordenElement = document.querySelector('.orden');
+  const evidenciasElement = document.getElementById('contenedor_evidencias');
+  const pageWidth = pdf.internal.pageSize.getWidth();
+
+  // --- Primera página: Orden sin evidencias ---
+  evidenciasElement.style.display = 'none';
+  const canvasOrden = await html2canvas(ordenElement, { scale: 2 });
+  const imgOrden = canvasOrden.toDataURL('image/png');
+  const imgHeight = canvasOrden.height * (pageWidth / canvasOrden.width);
+  pdf.addImage(imgOrden, 'PNG', 0, 0, pageWidth, imgHeight);
+
+  // --- Segunda página: Evidencias ---
+  evidenciasElement.style.display = 'flex';
+
+  // Guardamos contenido original
+  const contenidoOriginal = ordenElement.innerHTML;
+
+  // Construimos un HTML temporal para la segunda página
+  ordenElement.innerHTML = `
+   
+  <br> <br>
+    <p style="font-size: 18px; font-weight: bold; text-align: center; margin: 2px 0;">
+      CENTRO MÉDICO NAVAL 
+    </p>
+    <p style="font-size: 18px; font-weight: bold; text-align: center; margin: 2px 0;">
+      DIRECCIÓN DE INGENIERÍA Y SERVICIOS
+    </p>
+    
+    <p style="font-size: 16px; font-weight: bold; text-align: center; margin: 2px 0;">
+      SUBDIRECCIÓN DE INGENIERÍA BIOMÉDICA
+    </p>
+
+  <h2><span style="text-decoration: underline;">SERVICIO DE MANTENIMIENTO PREVENTIVO</span></h2>
+  <div class="titulo-seccion" style="text-align:center; font-size:18px; font-weight:bold; margin-bottom:15px;">
+      Evidencias Fotográficas
+    </div>
+    ${evidenciasElement.outerHTML}
+  `;
+
+  const canvasEvidencias = await html2canvas(ordenElement, { scale: 2 });
+  const imgEvidencias = canvasEvidencias.toDataURL('image/png');
+  const imgEvidenciasHeight = canvasEvidencias.height * (pageWidth / canvasEvidencias.width);
+
+  pdf.addPage();
+  pdf.addImage(imgEvidencias, 'PNG', 0, 0, pageWidth, imgEvidenciasHeight);
+
+  // --- Guardar PDF ---
+  pdf.save("orden_mantenimiento.pdf");
+
+  // Restaurar contenido original
+  ordenElement.innerHTML = contenidoOriginal;
+}
+</script>
+
+
+
+</body>
+</html>

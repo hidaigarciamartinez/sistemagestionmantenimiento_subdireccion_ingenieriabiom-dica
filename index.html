@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventario Equipos Médicos</title>
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+</head>
+
+<body>
+
+  <!-- 🔹 CONTENEDOR MAESTRO -->
+  <div class="main-container">
+
+      <!-- 🔹 ENCABEZADO -->
+      <header class="encabezado">
+          <h1>Inventario de Equipos Médicos</h1>
+      </header>
+
+      <!-- 🔹 SUBTÍTULOS INSTITUCIONALES -->
+      <div class="container2">
+          <h1>CENTRO MÉDICO NAVAL</h1>
+          <h1>SUBDIRECCIÓN DE INGENIERÍA BIOMÉDICA</h1>
+      </div>
+
+      <!-- 🔹 LOGIN / APLICACIÓN -->
+      <div class="login-container">
+
+          <div id="auth-section" class="login-card">
+              <h2>Iniciar Sesión</h2>
+              <input type="email" id="email" placeholder="Correo electrónico">
+              <input type="password" id="password" placeholder="Contraseña">
+
+              <div class="login-actions">
+                  <button id="login-btn">Iniciar sesión</button>
+              </div>
+          </div>
+
+          <!-- 🔹 SECCIÓN PRINCIPAL DE LA APP -->
+          <div id="app-section" style="display:none;">
+
+              <!-- FORMULARIO -->
+              <div id="form-section" class="container2">
+                  <h2 id="form-title">INGRESO DE EQUIPO ÁREA DE URGENCIAS</h2>
+
+                  <input type="text" id="equipo" placeholder="Equipo">
+                  <input type="text" id="marca" placeholder="Marca">
+                  <input type="text" id="id" placeholder="ID">
+                  <input type="text" id="modelo" placeholder="Modelo">
+                  <input type="text" id="serie" placeholder="Número de serie">
+                  <input type="text" id="ubicacion" value="Urgencias">
+                  <input type="text" id="estadosituacional" placeholder="Estado Situacional">
+                  <input type="text" id="archivo" placeholder="Enlace de archivo (Drive o Supabase)">
+                  <input type="date" id="fecha-mantenimiento">
+                  <input type="hidden" id="estatus">
+                  <input type="text" id="observaciones" placeholder="Observaciones">
+                  <input type="text" id="realizo-mantenimiento" placeholder="Realizó mantenimiento">
+
+                  <button id="add-btn">Agregar</button>
+              </div>
+
+              <hr>
+
+              <!-- 🔹 TABLA DE INVENTARIO -->
+              <div class="container-table">
+                  <table border="1">
+                      <thead>
+                          <tr>
+                              <th>#</th>
+                              <th>Equipo</th>
+                              <th>ID</th>
+                              <th>Marca</th>
+                              <th>Modelo</th>
+                              <th>Número de Serie</th>
+                              <th>Ubicación</th>
+                              <th>Fecha de último <br> mantenimiento</th>
+                              <th>Fecha de próximo<br>mantenimiento</th>
+                              <th>Estado mantenimiento preventivo</th>
+                              <th>Estado Situacional</th>
+                              <th>Observaciones</th>
+                              <th>Realizó mantenimiento</th>
+                              <th>Adjuntar archivos</th>
+                              <th>Acciones</th>
+                          </tr>
+                      </thead>
+                      <tbody id="inventory-table"></tbody>
+                  </table>
+              </div>
+
+              <!-- 🔹 BOTÓN DE VERIFICACIÓN -->
+              <button id="update-status-btn">Verificar mantenimientos vencidos</button>
+
+              <!-- 🔹 INDICADORES -->
+              <div id="indicadores" class="indicadores">
+                  <h3>Indicador de cumplimiento de mantenimiento preventivo</h3>
+                  <p>Total de equipos: <span id="total-equipos">0</span></p>
+                  <p>Equipos con mantenimiento realizado: <span id="equipos-realizados">0</span></p>
+                  <p>Porcentaje de cumplimiento: <span id="porcentaje-mantenimiento">0%</span></p>
+              </div>
+
+              <button id="logout-btn">Cerrar sesión</button>
+
+          </div> <!-- FIN APP -->
+
+      </div> <!-- FIN LOGIN CONTAINER -->
+
+  </div> <!-- FIN CONTENEDOR MAESTRO -->
+
+  <script src="app.js"></script>
+
+</body>
+</html>

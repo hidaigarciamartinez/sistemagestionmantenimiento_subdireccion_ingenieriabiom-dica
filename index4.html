@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyB05ZOHYNasz-OXz0WUc9ItU9V_UNIiCZo",
+    authDomain: "inven-aed0b.firebaseapp.com",
+    projectId: "inven-aed0b",
+    storageBucket: "inven-aed0b.firebasestorage.app",
+    messagingSenderId: "847520272319",
+    appId: "1:847520272319:web:8eebdd254db70c3f759b0a",
+    measurementId: "G-G1D74TVXMB"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+</script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Orden de Servicio - Mantenimiento</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background-color: #f0f0f0; }
+    h1, h2 { color: #004080; text-align: center; }
+    form, .resultado { max-width: 900px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; }
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    input, textarea, select { width: 100%; padding: 6px; margin-top: 5px; }
+    .boton { margin-top: 20px; padding: 10px 20px; background-color: #004080; color: white; border: none; cursor: pointer; border-radius: 4px; }
+    .resultado { display: none; margin-top: 30px; border: 2px solid #004080; background: #ffffff; font-size: 15px; line-height: 1.6; }
+    .seccion { border-bottom: 1px solid #ccc; padding: 10px 0; }
+    .fila { display: flex; justify-content: space-between; }
+    .columna { width: 48%; }
+    .tabla { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    .tabla td, .tabla th { border: 1px solid #999; padding: 8px; text-align: left; }
+    .titulo-seccion { background-color: #e6f0ff; font-weight: bold; padding: 6px; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Orden de Servicio - Mantenimiento Preventivo</h1>
+
+  <form id="busqueda">
+    <label>Ingrese ID del Equipo</label>
+    <input type="text" id="id_equipo" required />
+    <button type="submit" class="boton">Buscar Equipo</button>
+  </form>
+
+  <form id="formulario" style="display:none;">
+    <div class="seccion">
+      <div class="fila">
+        <div class="columna"><strong>Equipo:</strong> <span id="r_equipo_form"></span></div>
+        <div class="columna"><strong>Marca:</strong> <span id="r_marca_form"></span></div>
+      </div>
+      <div class="fila">
+        <div class="columna"><strong>Modelo:</strong> <span id="r_modelo_form"></span></div>
+        <div class="columna"><strong>No. Serie:</strong> <span id="r_serie_form"></span></div>
+      </div>
+      <div class="fila">
+        <div class="columna"><strong>Área:</strong> <span id="r_area_form"></span></div>
+        
+      </div>
+    </div>
+<label for="fecha_mantenimiento">Fecha de mantenimiento:</label>
+<input type="date" id="fecha_mantenimiento" name="fecha_mantenimiento" required>
+<label for="numero_orden">Número de orden:</label>
+<input type="text" id="numero_orden" name="numero_orden" required>
+
+
+    <div class="titulo-seccion">Rutina de mantenimiento (marca ✔ o ✘)</div>
+    <div class="seccion">
+      <div class="rutina">
+  <span>1. Inspección física del equipo</span><br>
+  <label>
+    <input type="radio" name="rutina1" value="Aprobada"> Aprobada
+  </label>
+  <label>
+    <input type="radio" name="rutina1" value="Negada"> Negada
+  </label>
+</div>
+
+<div class="rutina">
+  <span>2. Limpieza de componentes eléctricos y mecánicos</span><br>
+  <label>
+    <input type="radio" name="rutina2" value="Aprobada"> Aprobada
+  </label>
+  <label>
+    <input type="radio" name="rutina2" value="Negada"> Negada
+  </label>
+</div>
+
+<div class="rutina">
+  <span>3. Revisión del funcionamiento de la batería de respaldo</span><br>
+  <label>
+    <input type="radio" name="rutina3" value="Aprobada"> Aprobada
+  </label>
+  <label>
+    <input type="radio" name="rutina3" value="Negada"> Negada
+  </label>
+</div>
+
+<div class="rutina">
+  <span>4. Verificación de parámetros SPO2, ECG y temperatura</span><br>
+  <label>
+    <input type="radio" name="rutina4" value="Aprobada"> Aprobada
+  </label>
+  <label>
+    <input type="radio" name="rutina4" value="Negada"> Negada
+  </label>
+</div>
+
+<div class="rutina">
+  <span>5. Verificación de pruebas de fuga de PANI</span><br>
+  <label>
+    <input type="radio" name="rutina5" value="Aprobada"> Aprobada
+  </label>
+  <label>
+    <input type="radio" name="rutina5" value="Negada"> Negada
+  </label>
+</div>
+
+<div class="rutina">
+  <span>6. Limpieza integral externa</span><br>
+  <label>
+    <input type="radio" name="rutina6" value="Aprobada"> Aprobada
+  </label>
+  <label>
+    <input type="radio" name="rutina6" value="Negada"> Negada
+  </label>
+</div>
+
+<div class="rutina">
+  <span>7. Se verifica y ajusta alarmas audibles y visuales</span><br>
+  <label>
+    <input type="radio" name="rutina7" value="Aprobada"> Aprobada
+  </label>
+  <label>
+    <input type="radio" name="rutina7" value="Negada"> Negada
+  </label>
+</div>
+
+<div class="rutina">
+  <span>8. Pruebas de funcionamiento en general</span><br>
+  <label>
+    <input type="radio" name="rutina8" value="Aprobada"> Aprobada
+  </label>
+  <label>
+    <input type="radio" name="rutina8" value="Negada"> Negada
+  </label>
+</div>
+
+    </div>
+
+    <label>Estado del Equipo </label>
+    <select name="descripcion">
+      <option value="PRIMERA SITUACIÓN">PRIMERA SITUACIÓN</option>
+      <option value="SEGUNDA SITUACIÓN">SEGUNDA SITUACIÓN</option>
+      <option value="TERCERA SITUACIÓN">TERCERA SITUACIÓN</option>
+    </select>
+
+    <label>Refacciones utilizadas</label>
+    <textarea name="refacciones"></textarea>
+
+    <label>Observaciones</label>
+    <textarea name="observaciones"></textarea>
+
+    <label>Recomendaciones</label>
+    <textarea name="recomendaciones"></textarea>
+
+    <div class="titulo-seccion">Evidencia Fotográfica</div>
+    <input type="file" id="evidencias" multiple accept="image/*" />
+
+    <div class="titulo-seccion">Firmas</div>
+    <div class="seccion">
+      <label>Firma del Área usuaria</label>
+      <canvas id="firmaTecnico" width="300" height="100" style="border:1px solid #999; background: #fff;"></canvas>
+      <button type="button" onclick="limpiarFirma('firmaTecnico')" class="boton" style="margin-top:10px;">Limpiar Firma</button>
+
+      <label style="margin-top:20px;">Ingeniero de Servicio</label>
+      <canvas id="firmaResponsable" width="300" height="100" style="border:1px solid #999; background: #fff;"></canvas>
+      <button type="button" onclick="limpiarFirma('firmaResponsable')" class="boton" style="margin-top:10px;">Limpiar Firma </button>
+
+      <label style="margin-top:20px;">Subtor. de Ingenieria Biomédica</label>
+      <canvas id="firmaSupervisor" width="300" height="100" style="border:1px solid #999; background: #fff;"></canvas>
+      <button type="button" onclick="limpiarFirma('firmaSupervisor')" class="boton" style="margin-top:10px;">Limpiar Firma</button>
+    </div>
+
+    <button type="button" class="boton" onclick="enviarDatos()">Generar Orden</button>
+  </form>
+
+  <div class="resultado" id="resultado" style="display:none;">
+    <h2>ORDEN DE SERVICIO - FORMATO FINAL</h2>
+    <!-- contenido para mostrar la orden (opcional) -->
+  </div>
+
+  <script>
+    const equipos = {
+      "URG-050": {
+        ID:"URG-050",
+        equipo: "Monitor de Signos Vitales",
+        marca: "Philips",
+        modelo: "MX700",
+        serie: "DE58552015",
+        area: "Urgencias"
+      },
+      "ICU-101": {
+        ID:"ICU-101",
+        equipo: "Ventilador de cuidados intensivos",
+        marca: "Dräger",
+        modelo: "Evita Infinity V500",
+        serie: "DRG200354",
+        area: "Terapia Intensiva"
+      }
+    };
+
+    const formBusqueda = document.getElementById('busqueda');
+    const formDatos = document.getElementById('formulario');
+// 🔹 Si viene un ID en la URL, cargar directamente ese equipo
+window.addEventListener("DOMContentLoaded", async () => {
+  const params = new URLSearchParams(window.location.search);
+  const idParam = params.get("id");
+
+  if (idParam) {
+    try {
+      const snapshot = await db.collection("equipos").where("id", "==", idParam).get();
+      if (!snapshot.empty) {
+        const doc = snapshot.docs[0];
+        const datos = doc.data();
+
+        document.getElementById('r_equipo_form').textContent = datos.equipo;
+        document.getElementById('r_marca_form').textContent = datos.marca;
+        document.getElementById('r_modelo_form').textContent = datos.modelo;
+        document.getElementById('r_serie_form').textContent = datos.serie;
+        document.getElementById('r_area_form').textContent = datos.ubicacion;
+
+        document.getElementById('id_equipo').value = datos.id;
+        document.getElementById('busqueda').style.display = 'none';
+        document.getElementById('formulario').style.display = 'block';
+      } else {
+        alert("No se encontró el equipo con ID: " + idParam);
+      }
+    } catch (error) {
+      console.error("Error al cargar equipo desde URL:", error);
+      alert("Ocurrió un error al cargar la hoja de servicio.");
+    }
+  }
+});
+
+    formBusqueda.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const id = document.getElementById('id_equipo').value.trim();
+      formBusqueda.addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const id = document.getElementById('id_equipo').value.trim();
+
+  try {
+    // 🔹 Buscar documento cuyo campo "id" coincida con el ID ingresado
+    const snapshot = await db.collection("equipos").where("id", "==", id).get();
+
+    if (snapshot.empty) {
+      alert("ID no encontrado en el inventario.");
+      formDatos.style.display = 'none';
+      return;
+    }
+
+    // 🔹 Tomar el primer resultado
+    const doc = snapshot.docs[0];
+    const datos = doc.data();
+
+    // 🔹 Llenar los campos del formulario
+    document.getElementById('r_equipo_form').textContent = datos.equipo;
+    document.getElementById('r_marca_form').textContent = datos.marca;
+    document.getElementById('r_modelo_form').textContent = datos.modelo;
+    document.getElementById('r_serie_form').textContent = datos.serie;
+    document.getElementById('r_area_form').textContent = datos.ubicacion;
+
+    formDatos.style.display = 'block';
+  } catch (error) {
+    console.error("Error al buscar equipo:", error);
+    alert("Ocurrió un error al conectar con la base de datos.");
+  }
+});
+
+
+      if (datos) {
+        document.getElementById('r_equipo_form').textContent = datos.equipo;
+        document.getElementById('r_marca_form').textContent = datos.marca;
+        document.getElementById('r_modelo_form').textContent = datos.modelo;
+        document.getElementById('r_serie_form').textContent = datos.serie;
+        document.getElementById('r_area_form').textContent = datos.area;
+        
+        formDatos.style.display = 'block';
+      } else {
+        alert("ID no encontrado. Intente nuevamente.");
+        formDatos.style.display = 'none';
+      }
+    });
+// 🔹 Función para convertir las imágenes a base64 comprimidas
+function fileToBase64Compressed(file, maxWidth = 800, quality = 0.7) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        try {
+          const canvas = document.createElement("canvas");
+          const scale = Math.min(maxWidth / img.width, 1);
+          canvas.width = img.width * scale;
+          canvas.height = img.height * scale;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          const dataUrl = canvas.toDataURL("image/jpeg", quality);
+          resolve(dataUrl);
+        } catch (err) {
+          reject(err);
+        }
+      };
+      img.onerror = () => reject(new Error("No se pudo cargar la imagen."));
+      img.src = e.target.result;
+    };
+
+    reader.onerror = () => reject(new Error("Error al leer el archivo."));
+    reader.readAsDataURL(file);
+  });
+}
+
+ // 🔹 Función para generar la orden y procesar las evidencias
+async function enviarDatos() {
+  try {
+    const form = document.getElementById('formulario');
+    const formData = new FormData(form);
+
+    const datos = {
+      id: document.getElementById('id_equipo').value.trim(),
+      numeroOrden: document.getElementById('numero_orden').value.trim(),
+      descripcion: formData.get("descripcion"),
+      refacciones: formData.get("refacciones"),
+      observaciones: formData.get("observaciones"),
+      recomendaciones: formData.get("recomendaciones"),
+      fecha_mantenimiento: document.getElementById("fecha_mantenimiento").value,
+      rutinas: [],
+      evidencias: []
+    };
+
+    // Copiar datos del equipo
+    datos.equipo = document.getElementById('r_equipo_form').textContent;
+    datos.marca = document.getElementById('r_marca_form').textContent;
+    datos.modelo = document.getElementById('r_modelo_form').textContent;
+    datos.serie = document.getElementById('r_serie_form').textContent;
+    datos.area = document.getElementById('r_area_form').textContent;
+
+    // Guardar rutinas
+    for (let i = 1; i <= 8; i++) {
+      const descripcion = document.querySelector(`.rutina:nth-of-type(${i}) span`).textContent.trim();
+      const seleccion = form[`rutina${i}`].value || "";
+      datos.rutinas.push({
+        texto: descripcion,
+        estado: seleccion
+      });
+    }
+
+    // Capturar firmas
+    const firmas = capturarFirmas();
+    datos.firmaTecnico = firmas.firmaTecnico;
+    datos.firmaResponsable = firmas.firmaResponsable;
+    datos.firmaSupervisor = firmas.firmaSupervisor;
+
+    // Leer evidencias (si hay)
+    const inputFiles = document.getElementById('evidencias').files;
+    if (inputFiles.length > 0) {
+      console.log("Procesando evidencias, por favor espera...");
+      const base64Images = await Promise.all(
+        Array.from(inputFiles).map(file => fileToBase64Compressed(file))
+      );
+      datos.evidencias = base64Images;
+    }
+
+    // Guardar datos completos en sessionStorage
+    sessionStorage.setItem("orden", JSON.stringify(datos));
+
+    // Abrir la orden
+    window.open("orden.html", "_blank");
+
+  } catch (error) {
+    console.error("❌ Error al generar la orden:", error);
+    alert("Ocurrió un error al generar la orden: " + error.message);
+  }
+}
+
+
+    
+
+    function prepararCanvasFirma(id) {
+      const canvas = document.getElementById(id);
+      const ctx = canvas.getContext("2d");
+      let dibujando = false;
+
+      canvas.addEventListener("mousedown", e => {
+        dibujando = true;
+        ctx.beginPath();
+        ctx.moveTo(e.offsetX, e.offsetY);
+      });
+
+      canvas.addEventListener("mousemove", e => {
+        if (dibujando) {
+          ctx.lineTo(e.offsetX, e.offsetY);
+          ctx.stroke();
+        }
+      });
+
+      canvas.addEventListener("mouseup", () => {
+        dibujando = false;
+      });
+
+      canvas.addEventListener("touchstart", e => {
+        const rect = canvas.getBoundingClientRect();
+        const touch = e.touches[0];
+        ctx.beginPath();
+        ctx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
+        dibujando = true;
+      });
+
+      canvas.addEventListener("touchmove", e => {
+        if (!dibujando) return;
+        const rect = canvas.getBoundingClientRect();
+        const touch = e.touches[0];
+        ctx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
+        ctx.stroke();
+        e.preventDefault();
+      });
+
+      canvas.addEventListener("touchend", () => {
+        dibujando = false;
+      });
+    }
+
+    function limpiarFirma(id) {
+      const canvas = document.getElementById(id);
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function capturarFirmas() {
+      const firmaTecnico = document.getElementById("firmaTecnico").toDataURL("image/png");
+      const firmaResponsable = document.getElementById("firmaResponsable").toDataURL("image/png");
+      const firmaSupervisor = document.getElementById("firmaSupervisor").toDataURL("image/png");
+      return { firmaTecnico, firmaResponsable, firmaSupervisor };
+    }
+
+    window.addEventListener('load', () => {
+      prepararCanvasFirma("firmaTecnico");
+      prepararCanvasFirma("firmaResponsable");
+      prepararCanvasFirma("firmaSupervisor");
+    });
+  </script>
+</body>
+</html>
