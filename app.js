@@ -96,12 +96,12 @@ function formatearMesAnio(fechaStr) {
         <td>${d.modelo}</td>
         <td>${d.serie}</td>
         <td>${d.ubicacion}</td>
+        <td>${d.estadosituacional}</td>
+        <td>${d.observaciones}</td>
        <td>${formatearMesAnio(d.fecha_ultimo_mantenimiento)}</td>
        <td>${formatearMesAnio(d.fecha_mantenimiento)}</td>
         <td class="${estadoClass}">${d.estatus || "Pendiente"}</td>
         <td>${d.realizo_mantenimiento}</td>
-        <td>${d.estadosituacional}</td>
-        <td>${d.observaciones}</td>
          <td><a href="${d.archivo}" target="_blank">Ver archivo</a></td>
        <td>
   <button class="${statusClass}" ${disabledAttr} onclick="updateStatus('${doc.id}')">${buttonText}</button>
@@ -283,4 +283,5 @@ document.getElementById("update-status-btn")?.addEventListener("click", () => {
 
   
 });
+
 
